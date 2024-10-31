@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Don't Click the Button: Horror Edition</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+        }
+        #scaryButton {
+            padding: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            border: none;
+            background-color: red;
+            color: white;
+            transition: transform 0.2s;
+        }
+        #scaryButton:hover {
+            transform: scale(1.1);
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Don't Click the Button!</h1>
+        <button id="scaryButton">Click Me!</button>
+        <div id="message"></div>
+        <!-- Audio element for doorbell sound -->
+        <audio id="doorbellSound" src="doorbell.mp3"></audio>
+    </div>
+
+    <script>
+        let clickCount = 0;
+        const jumpScareTriggers = [20, 40, 60, 80, 100, 120, 140, 160, 180]; // Click thresholds for visual scares
+        const messages = [
+            "BOO! You should not be here!",
+            "Something is watching you...",
+            "You can't escape!",
+            "Why did you come here?",
+            "This is your last warning!",
+            "I'm right behind you...",
+            "You should leave now!",
+            "They are coming for you!",
+            "It's too late to run!",
+            "Are you brave enough to continue?",
+            "You feel a chill down your spine...",
+            "You hear whispers in the dark...",
+            "The shadows are moving...",
+            "You should look behind you...",
+            "Is that a figure lurking in the corner?",
+            "There's no way out!",
+            "You should have listened...",
+            "The walls are closing in...",
+            "Something is in the room with you...",
+            "You can’t hide forever...",
+            "This is just the beginning..."
+        ];
+        
+        const creepyMessages = [
+            "They’re not just watching... they’re waiting.",
+            "Do you hear that? It’s coming for you.",
+            "Every time you click, you draw closer to the darkness.",
+            "It’s already inside your head...",
+            "What you’ve awakened will not rest.",
+            "You shouldn’t have ignored the warnings.",
+            "Every shadow is a reflection of your fears.",
+            "They know your name... and they are hungry.",
+            "The air grows thick; you can’t breathe.",
+            "You feel something cold brush against your neck...",
+            "Are you ready for what comes next?",
+            "The more you click, the more powerful they become.",
+            "This is where nightmares are born.",
+            "You’ve crossed a line that should never be crossed.",
+            "Your heart races, but it won’t save you now.",
+            "You’re trapped in a game that plays you.",
+            "Your mind is a fragile thing, isn’t it?",
+            "You wish you could run, but they won’t let you.",
+            "You can feel the dread wrapping around you...",
+            "They are closer than you think...",
+            "You’ve already lost… just accept it."
+        ];
+        
+        const secretMessage = "Congratulations! You've uncovered a dark truth: This game was never meant for the living..."; // Secret message
+        const secretThreshold = 150; // Clicks required to reveal the secret
+        const endMessage = "You thought it was just a game, but now it's too late. They are watching you, and soon they will come for you..."; // Scary end message
+        const messageDiv = document.getElementById('message');
+        const doorbellSound = document.getElementById('doorbellSound'); // Reference to the audio element
+
+        document.getElementById('scaryButton').addEventListener('click', () => {
+            clickCount++;
+            messageDiv.innerHTML = `Clicks: ${clickCount}`;
+
+            if (jumpScareTriggers.includes(clickCount)) {
+                const intensityIndex = jumpScareTriggers.indexOf(clickCount);
+                const scareMessage = messages[intensityIndex] || "You're not safe...";
+                document.body.style.backgroundColor = 'red';
+                messageDiv.innerHTML = scareMessage;
+
+                setTimeout(() => {
+                    document.body.style.backgroundColor = 'black';
+                    messageDiv.innerHTML = `Clicks: ${clickCount}`;
+                }, 2000);
+            }
+
+            if (clickCount > 160) {
+                const creepyIndex = clickCount - 161; // To access creepyMessages array
+                if (creepyIndex < creepyMessages.length) {
+                    messageDiv.innerHTML = creepyMessages[creepyIndex];
+                    document.body.style.backgroundColor = 'red';
+                }
+            }
+
+            if (clickCount === secretThreshold) {
+                alert(secretMessage); // Reveal the secret message
+            }
+
+            if (clickCount >= 200) {
+                doorbellSound.play(); // Play doorbell sound when game is over
+                alert(endMessage); // Display the chilling end message
+                clickCount = 0; // Reset click count after game over
+                messageDiv.innerHTML = '';
+                document.body.style.backgroundColor = 'black';
+            }
+        });
+    </script>
+</body>
+</html>
